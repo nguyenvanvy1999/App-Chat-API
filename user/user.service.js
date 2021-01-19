@@ -1,0 +1,77 @@
+const User = require('./user.model');
+const mongoose = require('mongoose');
+
+// ________________________________________________
+function newUser(user) {
+    newUser = {
+        _id: mongoose.Types.ObjectId(),
+        email: user.email,
+        username: user.username,
+        password: user.password,
+        isActive: false,
+    };
+    return newUser;
+}
+async function insert(newUser) {
+    try {
+        const user = new User(newUser);
+        const result = await user.save();
+        return result;
+    } catch (error) {
+        return error;
+    }
+}
+
+async function getUserByEmail(email) {
+    try {
+        const user = await User.findOne({ email: email });
+        return user;
+    } catch (error) {
+        return error;
+    }
+}
+async function getAllUser() {
+    try {
+        const users = await User.find();
+        return users;
+    } catch (error) {
+        return error;
+    }
+}
+
+async function editUser(email, newUsername, newPassword) {
+    try {
+        const user = await User.findOneAndUpdate({ email: email }, { username: newUsername, password: newPassword }, { new: true });
+        return user;
+    } catch (error) {
+        return error;
+    }
+}
+
+async function deleteUserByEmail(email) {
+    try {
+        const result = await User.findOneAndDelete({ email: email });
+        return result;
+    } catch (error) {
+        return error;
+    }
+}
+
+async function activeAccount(email) {
+    try {
+        const result = await User.findOneAndUpdate({ email: email }, { isActive: true }, { new: true });
+        return result;
+    } catch (error) {
+        return error;
+    }
+}
+
+module.exports = {
+    newUser,
+    insert,
+    getUserByEmail,
+    getAllUser,
+    activeAccount,
+    deleteUserByEmail,
+    editUser,
+};
