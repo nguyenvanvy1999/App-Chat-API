@@ -1,8 +1,10 @@
 const UserService = require('./user.service');
 const HTTP_STATUS_CODE = require('../config/constant/http');
-const jwtHelper = require('../helper/jwt');
 const jwtConfig = require('../config/constant/jwt');
+const jwtHelper = require('../helper/jwt');
 const mailHelper = require('../helper/mail');
+const bcryptHelper = require('../helper/bcrypt');
+const { APIError } = require('../helper/error');
 async function signUp(req, res, next) {
     try {
         const user = UserService.newUser(req.body);
@@ -17,6 +19,26 @@ async function signUp(req, res, next) {
         res.status(HTTP_STATUS_CODE.SUCCESS.OK).send({
             message: 'Check your email and verify account!',
             result: result,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+async function signIn(req, res, next) {
+    try {
+        const user = await UserService.searchUser(req.body);
+        if (!user) throw new APIError({ message: 'Email wrong !' });
+        const isPassword = await bcryptHelper.compare(
+            req.body.password,
+            user.password
+        );
+        if (!isPassword) throw new APIError({ message: 'Password wrong !' });
+        if (!user.isActive)
+            throw new APIError({ message: 'Account is not activated ' });
+        const token = await jwtHelper.returnToken(user);
+        res.status(HTTP_STATUS_CODE.SUCCESS.OK).send({
+            message: 'Verify Successfully',
+            result: token,
         });
     } catch (error) {
         next(error);
@@ -45,4 +67,4 @@ async function findUser(req, res, next) {
         next(error);
     }
 }
-module.exports = { signUp, verifyAccount, findUser };
+module.exports = { signUp, verifyAccount, findUser, signIn };

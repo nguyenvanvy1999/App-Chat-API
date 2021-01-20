@@ -36,7 +36,7 @@ function handleError(err, req, res, next) {
         err = new APIError({
             message: err.message || error.message,
             status: err.status || HTTP_STATUS_CODE.SERVER_ERROR.SERVICE_UNAVAILABLE,
-            errors: err.errors,
+            errors: err.error,
         });
     }
     return res.status(err.status).json(err);

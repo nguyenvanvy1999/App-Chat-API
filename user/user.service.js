@@ -66,11 +66,13 @@ async function searchUser(user) {
             }
         }
         if (result.length === 1) return result[0];
+        if (result.length === 0) return null;
         return result;
     } catch (error) {
         return error;
     }
 }
+
 module.exports = {
     newUser,
     insert,
