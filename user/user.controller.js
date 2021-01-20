@@ -2,7 +2,6 @@ const UserService = require('./user.service');
 const HTTP_STATUS_CODE = require('../config/constant/http');
 const jwtHelper = require('../helper/jwt');
 const jwtConfig = require('../config/constant/jwt');
-const mailConfig = require('../config/constant/mail').mailConfig;
 const mailHelper = require('../helper/mail');
 async function signUp(req, res, next) {
     try {
@@ -22,4 +21,18 @@ async function signUp(req, res, next) {
         next(error);
     }
 }
-module.exports = { signUp };
+
+async function verifyAccount(req, res, next) {
+    try {
+        const token = req.body.token || req.query.token || req.header['token'];
+        let decoded = await jwtHelper.verifyToken(token, jwtConfig.VERIFY.SECRET);
+        let result = await UserService.activeAccount(decoded.data.email);
+        return res.status(HTTP_STATUS_CODE.SUCCESS.OK).send({
+            message: 'Active successfully !.Now you can using out function',
+            result,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+module.exports = { signUp, verifyAccount };
