@@ -65,6 +65,7 @@ async function searchUser(user) {
                 });
             }
         }
+        if (result.length === 1) return result[0];
         return result;
     } catch (error) {
         return error;

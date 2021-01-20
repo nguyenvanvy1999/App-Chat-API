@@ -32,10 +32,11 @@ function handleError(err, req, res, next) {
         });
     }
     if (err) {
+        const error = err.errors;
         err = new APIError({
-            message: err.message,
+            message: err.message || error.message,
             status: err.status || HTTP_STATUS_CODE.SERVER_ERROR.SERVICE_UNAVAILABLE,
-            errors: err.error,
+            errors: err.errors,
         });
     }
     return res.status(err.status).json(err);

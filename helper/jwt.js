@@ -1,6 +1,6 @@
 const jwtConfig = require('../config/constant/jwt');
 const jwt = require('jsonwebtoken');
-
+const { APIError } = require('./error');
 async function generateToken(user, secretSignature, tokenLife) {
     try {
         const userData = {
@@ -14,7 +14,7 @@ async function generateToken(user, secretSignature, tokenLife) {
         });
         return token;
     } catch (error) {
-        return error;
+        throw new APIError({ message: error.message, errors: error });
     }
 }
 async function verifyToken(token, secretKey) {
@@ -43,7 +43,7 @@ async function returnToken(user) {
             refreshToken: refreshToken,
         };
     } catch (error) {
-        return error;
+        throw new APIError({ message: error.message, errors: error });
     }
 }
 
