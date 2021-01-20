@@ -6,13 +6,13 @@ const mailHelper = require('../helper/mail');
 async function signUp(req, res, next) {
     try {
         const user = UserService.newUser(req.body);
-        const token = await jwtHelper.generateToken(
-            user,
-            jwtConfig.VERIFY.SECRET,
-            jwtConfig.VERIFY.LIFE
-        );
-        const newMail = mailHelper.newMailOption(user.email, token);
-        const result = await mailHelper.sendMail(newMail);
+        // const token = await jwtHelper.generateToken(
+        //     user,
+        //     jwtConfig.VERIFY.SECRET,
+        //     jwtConfig.VERIFY.LIFE
+        // );
+        // const newMail = mailHelper.newMailOption(user.email, token);
+        // const result = await mailHelper.sendMail(newMail);
         await UserService.insert(user);
         res
             .status(HTTP_STATUS_CODE.SUCCESS.OK)
@@ -35,4 +35,13 @@ async function verifyAccount(req, res, next) {
         next(error);
     }
 }
-module.exports = { signUp, verifyAccount };
+
+async function findUser(req, res, next) {
+    try {
+        const result = await UserService.searchUser(req.query);
+        return res.status(HTTP_STATUS_CODE.SUCCESS.OK).send({ result: result });
+    } catch (error) {
+        next(error);
+    }
+}
+module.exports = { signUp, verifyAccount, findUser };

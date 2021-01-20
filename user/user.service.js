@@ -22,23 +22,6 @@ async function insert(newUser) {
     }
 }
 
-async function getUserByEmail(email) {
-    try {
-        const user = await User.findOne({ email: email });
-        return user;
-    } catch (error) {
-        return error;
-    }
-}
-async function getAllUser() {
-    try {
-        const users = await User.find();
-        return users;
-    } catch (error) {
-        return error;
-    }
-}
-
 async function editUser(email, newUsername, newPassword) {
     try {
         const user = await User.findOneAndUpdate({ email: email }, { username: newUsername, password: newPassword }, { new: true });
@@ -65,13 +48,33 @@ async function activeAccount(email) {
         return error;
     }
 }
-
+async function searchUser(user) {
+    try {
+        let result;
+        if (user === null) {
+            result = await User.find();
+        } else {
+            const { email, username, _id } = user;
+            if (email && username) {
+                result = await User.find({
+                    $and: [{ email: email }, { username: username }],
+                });
+            } else {
+                result = await User.find({
+                    $or: [{ email: email }, { username: username }, { _id: _id }],
+                });
+            }
+        }
+        return result;
+    } catch (error) {
+        return error;
+    }
+}
 module.exports = {
     newUser,
     insert,
-    getUserByEmail,
-    getAllUser,
     activeAccount,
     deleteUserByEmail,
     editUser,
+    searchUser,
 };

@@ -8,5 +8,6 @@ module.exports = () => {
     router.use(multer().none());
     router.route('/sign-up').post(UserController.signUp, handleError);
     router.route('/verify').get(UserController.verifyAccount, handleError);
+    router.route('/search/user?').get(UserController.findUser, handleError);
     return router;
 };
