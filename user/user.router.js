@@ -10,5 +10,6 @@ module.exports = () => {
     router.route('/verify').get(UserController.verifyAccount, handleError);
     router.route('/search/user?').get(UserController.findUser, handleError);
     router.route('/sign-in').get(UserController.signIn, handleError);
+    router.route('/:id').get(UserController.userProfile, handleError);
     return router;
 };

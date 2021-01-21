@@ -9,6 +9,7 @@ const userSchema = new Schema({
     password: { type: String, required: true },
     isActive: { type: Boolean, default: false },
 }, { timestamps: true });
+
 userSchema.pre('save', async function(next) {
     const user = this;
     if (user.isModified('password')) {

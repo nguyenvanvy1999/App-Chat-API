@@ -54,14 +54,14 @@ async function searchUser(user) {
         if (user === null) {
             result = await User.find();
         } else {
-            const { email, username, _id } = user;
+            const { email, username, id } = user;
             if (email && username) {
                 result = await User.find({
                     $and: [{ email: email }, { username: username }],
                 });
             } else {
                 result = await User.find({
-                    $or: [{ email: email }, { username: username }, { _id: _id }],
+                    $or: [{ email: email }, { username: username }, { _id: id }],
                 });
             }
         }

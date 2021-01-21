@@ -58,6 +58,17 @@ async function verifyAccount(req, res, next) {
         next(error);
     }
 }
+async function userProfile(req, res, next) {
+    try {
+        const user = await UserService.searchUser(req.params);
+        if (!user) throw new APIError({ message: 'No user found!' });
+        return res.status(HTTP_STATUS_CODE.SUCCESS.OK).send({
+            result: user,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
 
 async function findUser(req, res, next) {
     try {
@@ -67,4 +78,4 @@ async function findUser(req, res, next) {
         next(error);
     }
 }
-module.exports = { signUp, verifyAccount, findUser, signIn };
+module.exports = { signUp, verifyAccount, findUser, signIn, userProfile };
