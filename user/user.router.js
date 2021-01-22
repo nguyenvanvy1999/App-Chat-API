@@ -13,10 +13,10 @@ module.exports = () => {
     router
         .route('/verify')
         .get(UserValidate.joiToken, UserController.verifyAccount, handleError);
-    router.route('/search/user?').get(UserController.findUser, handleError);
+    router.route('/search/user?').get(UserController.findUser, handleError); //NOTE:add validate here
     router
         .route('/sign-in')
         .get(UserValidate.joiSignIn, UserController.signIn, handleError);
-    router.route('/:id').get(UserController.userProfile, handleError);
+    router.route('/:id').get(UserController.userProfile, handleError); //NOTE:add validate here
     return router;
 };

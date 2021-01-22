@@ -28,9 +28,7 @@ const multerConfig = {
     checkFile: function(file) {
         const mime = this.fileMime.find((types) => types.type === file.mimetype);
         const ext = this.fileExt.includes(path.extname(file.originalname));
-        if (mime && ext) {
-            return true;
-        }
+        if (mime && ext) return true;
         return false;
     },
 };
