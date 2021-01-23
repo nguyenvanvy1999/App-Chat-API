@@ -1,5 +1,5 @@
-const serverConfig = {
-    host: 'localhost',
-    port: 8080,
+const ServerConfig = {
+	host: 'localhost',
+	port: 8080,
 };
-module.exports = serverConfig;
+module.exports = ServerConfig;
