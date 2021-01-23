@@ -22,7 +22,7 @@ async function verifyToken(token, secretKey) {
         const decoded = await jwt.verify(token, secretKey);
         return decoded;
     } catch (error) {
-        return error;
+        throw new APIError({ message: error.message, errors: error });
     }
 }
 
