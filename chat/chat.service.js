@@ -30,11 +30,11 @@ async function insertChat(newChat) {
         throw new APIError({ message: error.message, errors: error });
     }
 }
-async function newMessage(message) {
+async function newMessage(user, message) {
     try {
         const newMessage = {
             _id: ObjectId,
-            from: message.user,
+            from: user._id,
             type: message.type,
             body: message.body,
             sendAt: message.sendAt || Date.now(),

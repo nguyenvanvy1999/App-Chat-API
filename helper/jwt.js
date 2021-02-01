@@ -25,7 +25,22 @@ async function verifyToken(token, secretKey) {
         throw new APIError({ message: error.message, errors: error });
     }
 }
-
+async function tokenChat(chat) {
+    try {
+        const chatData = {
+            _id: chat._id,
+            name: chat.name,
+            isPrivate: chat.isPrivate,
+            users: chat.users,
+        };
+        const token = await jwt.sign({ data: chatData }, secretSignature, {
+            algorithm: 'HS256',
+            expiresIn: tokenLife,
+        });
+    } catch (error) {
+        throw new APIError({ message: error.message, errors: error });
+    }
+}
 async function returnToken(user) {
     try {
         const accessToken = await generateToken(
@@ -47,4 +62,4 @@ async function returnToken(user) {
     }
 }
 
-module.exports = { returnToken, verifyToken, generateToken };
+module.exports = { returnToken, verifyToken, generateToken, tokenChat };
