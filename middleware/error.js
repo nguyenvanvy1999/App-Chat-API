@@ -42,7 +42,4 @@ function handleError(err, req, res, next) {
     return res.status(err.status).json(err);
 }
 
-module.exports = {
-    handleNotFoundPage,
-    handleError,
-};
+module.exports = { handleNotFoundPage, handleError };
